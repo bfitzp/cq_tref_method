@@ -1,0 +1,39 @@
+%----------------------------------------------------------------------
+% Hardcoded for the moment...
+%----------------------------------------------------------------------
+function [z_poles,N_1,w_vec]...
+    = GenPoles_L(...
+    z_polesCorner_N,z_polesOffset,sigma,...
+    w_1,w_2,w_3,w_4,w_5,w_6,...
+    v_1,v_2,v_3,v_4,v_5,v_6)
+
+w_vec = [w_1;w_2;w_3;w_4;w_5;w_6];
+corners_N = length(w_vec);
+
+j = (0:z_polesCorner_N-1).';
+
+offset_1 = z_polesOffset*v_1;
+offset_2 = z_polesOffset*v_2;
+offset_3 = z_polesOffset*v_3;
+offset_4 = z_polesOffset*v_4;
+offset_5 = z_polesOffset*v_5;
+offset_6 = z_polesOffset*v_6;
+z_poles_1 = offset_1 - exp(-sigma*j/sqrt(z_polesCorner_N))*exp(1i*pi/4); z_poles_1 = z_poles_1 + w_1;
+z_poles_2 = offset_2 - exp(-sigma*j/sqrt(z_polesCorner_N))*exp(-1i*pi/4); z_poles_2 = z_poles_2 + w_2;
+z_poles_3 = offset_3 - exp(-sigma*j/sqrt(z_polesCorner_N))*exp(-1i*pi/4); z_poles_3 = z_poles_3 + w_3;
+z_poles_4 = offset_4 - exp(-sigma*j/sqrt(z_polesCorner_N))*exp(-1i*pi/4); z_poles_4 = z_poles_4 + w_4;
+z_poles_5 = offset_5 + exp(-sigma*j/sqrt(z_polesCorner_N))*exp(1i*pi/4); z_poles_5 = z_poles_5 + v_5;
+z_poles_6 = offset_6 + exp(-sigma*j/sqrt(z_polesCorner_N))*exp(-1i*pi/4); z_poles_6 = z_poles_6 + v_6;
+
+z_poles = [...
+    z_poles_1,...
+    z_poles_2,...
+    z_poles_3,...
+    z_poles_4,...
+    z_poles_5,...
+    z_poles_6...
+    ];
+
+N_1 = corners_N*z_polesCorner_N;
+
+end

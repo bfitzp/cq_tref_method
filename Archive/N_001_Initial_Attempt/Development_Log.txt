@@ -1,0 +1,16 @@
+%----------------------------------------------------------------------
+N_1007_Any_Domain_Cvg
+%----------------------------------------------------------------------
+Items to incroporate in future development:
+    CQ version
+        ODE rule: Trap rule vs BDF2 frequencies
+            Run against these frequences
+    Plots of boundary solutions		
+    Equal panels sizes on each edge
+        Exponential clustering of sample points at corners - Do it for a square/triangle
+        L2 norm over boundary ... (didn't make any difference, or maybe its not implemented correctly)
+
+    Is there any improvement over just using Bessel functions?
+%----------------------------------------------------------------------
+N_1008_Any_Domain_CQ
+%----------------------------------------------------------------------
