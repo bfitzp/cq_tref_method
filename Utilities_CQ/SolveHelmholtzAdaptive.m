@@ -1,6 +1,6 @@
 % function [u, maxerr, f, Z, Zplot, A] = N_0003_Helmholtz_Eq_CQ_Export_(k_wave, P, z_0, varargin)
-function [finishedFlag, c, nrmlz, pol, n] = SolveHelmholtzAdaptive(...
-    k_wave, P, Z_hr, b_hr, err_tol_ast, varargin)
+function [finishedFlag, c, nrmlz, pol, n, errvec] = SolveHelmholtzAdaptive(...
+    k_wave, P, Z_hr, b_hr, errTolAst, varargin)
 
 finishedFlag = 0;
 %----------------------------------------------------------------------
@@ -15,9 +15,10 @@ wi = sort(imag(ww)); wi = wi([1 end]);
 wc = mean(wr+1i*wi);                             
 scl = max([diff(wr),diff(wi)]);                 % for scale- and transl-invariance
 
-tt_N = 30;
+tt_N = 40; % SHOULD BE A FUNCTION OF k
 
 q = .5;                 % sets which corners get more poles
+% slow = 1;
 if slow == 1
     q = 0;
 end                 % sets which corners get more poles
@@ -102,7 +103,8 @@ for stepno = minstepno:maxstepno
         h = 1e-4;                                     % 4-pt trapezoidal rule
     end
     
-    Z_hr_N = 1000;
+    Z_hr_N = length(Z_hr)/nw; % DOUBLE CHECK
+%     Z_hr_N = 1000;
     for k = 1:nw
         tt{k} = sort(tt{k}(:));
         tk = tt{k}; pk = pt{k};  
@@ -165,7 +167,7 @@ for stepno = minstepno:maxstepno
     % Global error
     %----------------------------------------------------------------------
     err = norm(wt.*(A*c-Gn),inf);                     % global error    
-    polmax = 100;
+    polmax = 120;
     
     %----------------------------------------------------------------------
     % Increment number of poles
@@ -188,7 +190,7 @@ for stepno = minstepno:maxstepno
         firstErr = err;
 %         tol = err*10^(-3);       
         firstFlag = 0;
-        if firstErr < err_tol_ast
+        if firstErr < errTolAst
             finishedFlag = 1;
             break;
         end
@@ -198,7 +200,7 @@ for stepno = minstepno:maxstepno
 %     if err < .5*tol
 %         break
 %     end                        % convergence success
-    if err < err_tol_ast
+    if err < errTolAst
         break
     end   
  
@@ -221,7 +223,7 @@ for stepno = minstepno:maxstepno
 %     plot(real(G),'b')
 %     plot(real(A*c),'r.')
 end
-fprintf('err_tol_ast: %.2e\n',err_tol_ast)
+fprintf('err_tol_ast: %.2e\n',errTolAst)
 fprintf('firstErr   : %.2e\n',firstErr)
 fprintf('err        : %.2e\n',err)
 fprintf('G          : %.2e\n',norm(real(Gn),inf))
@@ -233,7 +235,7 @@ if doPlotCvg
     figure
     hold on, grid on
     plot(errvec)
-    plot([1,stepno],[err_tol_ast,err_tol_ast],'g')
+    plot([1,stepno],[errTolAst,errTolAst],'g')
     ylim([1e-16,1e0])
     set(gca,'yscale','log')
 end

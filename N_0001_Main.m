@@ -17,6 +17,8 @@ c = 1;                          % Speed of sound
 
 % time_N = 300;
 % T = 2.5;
+% time_N = 240;
+% T = 2.00;
 time_N = 150;
 T = 1.25;
 % time_N = 75;                    % Number of time steps
@@ -27,13 +29,13 @@ dt = T/time_N;
 p = @(z) 1.5-2*z+0.5*z.^2;      % ODE solver/tranfer function argument
 
 sigOpt = 3;                     % Select signal to generate
-geomOpt = 'square' ;            % Select geometry to generate
-% geomOpt = 'l_shape';            % Select geometry to generate
+% geomOpt = 'square' ;            % Select geometry to generate
+geomOpt = 'l_shape';            % Select geometry to generate
 % geomOpt = 'l_shape_nc';         % Select geometry to generate
 
 grid_N = 150;                   % DoFs for observation grid
 
-err_tol = 5e-2;                 % Desired error tolerance
+errTol = 1e-2;                 % Desired error tolerance
 
 %----------------------------------------------------------------------
 % Generate signal and geometry
@@ -52,7 +54,8 @@ end
 %----------------------------------------------------------------------
 % Generate sample points and poles
 %----------------------------------------------------------------------
-z_0 = 0.2 + 0.0i;
+z_0 = 0.2 + 0.0i; % Trouble
+% z_0 = 0.2 + 0.3i;
 
 Z_hr_N = 1000;
 
@@ -83,9 +86,8 @@ testFreqResults = SolveCQ( ...
     u_in_bdy_fft_hr, ...
     p,c, ...
     time_N,dt, ...
-    z_0, ...
     Z_hr, ...
-    err_tol);
+    errTol);
 
 % doPlotScatteredFieldOnBdy_CQ = 0;
 % if doPlotScatteredFieldOnBdy_CQ
